@@ -16,7 +16,7 @@ The setup uses a `Makefile` to install everything in the correct places and keep
 
 Either all tools can be configured to be updated or just `i3`.
 
-# Disclaimer
+## Disclaimer
 
 This is generally still a very personalized setup, e.g. with special keybindings in `i3` or the choice of the tools which I just intended for my personal use on Ubuntu. That's also why I cannot guarantee it working for you from the start, not messing with other settings you have, etc. However, still feel free to take inspiration from my setup :) I am also planning on separating the color costumization and the i3 configuration part into individual projects since that could perhaps be more useful for others than myself. But, for now, this repository just mainly holds my personal code.
 
@@ -27,38 +27,19 @@ Please note: This setup is highly specific to my personal workflow on Ubuntu, in
 
 ---
 
-## Project Structure
+## Examples
+Example of the Micro terminal editor with Python syntax highlighting and unified colors:
 
-```
-.
-├── Makefile                # Build/Install automation
-├── i3/                     # i3 and i3blocks configs
-│   ├── i3_standard/        # Base i3 config + helper scripts
-│   │   ├── config.base
-│   │   ├── keyboard.sh
-│   │   ├── newnote.sh
-│   │   ├── poweroff.sh
-│   │   ├── touchpad.sh
-│   │   └── volume.sh
-│   └── i3_blocks/          # i3blocks config + helper scripts
-│       ├── config
-│       └── *.sh
-├── scripts/                # Theming scripts for individual apps
-│   ├── theme-yazi
-│   ├── theme-vscode
-│   ├── theme-rofi
-│   ├── theme-i3-colors
-│   ├── i3-build-config
-│   ├── theme-micro
-│   └── theme-flameshot
-├── themes/                 # Palette + syntax definitions
-│   ├── font.json
-│   ├── palette.json
-│   ├── syntax.json
-│   ├── palette_preview.png
-│   └── visualize_colors    # Script to preview palette colors
-└── README.md               # This file
-```
+![Micro Editor - Python](themes/examples/python_example.png)
+
+Example of the i3 blocks status bar:
+![i3 Status Bar](themes/examples/i3bar_example.png)
+
+Example of the Rofi menu:
+![Rofi Menu](themes/examples/rofi_example.png)
+
+Example of the Color Palette Preview: 
+![Palette Preview](themes/examples/palette_preview.png)
 
 ---
 
@@ -119,4 +100,37 @@ Please note: This setup is highly specific to my personal workflow on Ubuntu, in
 
 - Adjust single tools color parsing scripts: `./scripts/theme-<tool-name>` and then `make <tool-name>`
 
+---
 
+## Project Structure
+
+```
+.
+├── Makefile                # Build/Install automation
+├── i3/                     # i3 and i3blocks configs
+│   ├── i3_standard/        # Base i3 config + helper scripts
+│   │   ├── config.base
+│   │   ├── keyboard.sh
+│   │   ├── newnote.sh
+│   │   ├── poweroff.sh
+│   │   ├── touchpad.sh
+│   │   └── volume.sh
+│   └── i3_blocks/          # i3blocks config + helper scripts
+│       ├── config
+│       └── *.sh
+├── scripts/                # Theming scripts for individual apps
+│   ├── theme-yazi
+│   ├── theme-vscode
+│   ├── theme-rofi
+│   ├── theme-i3-colors
+│   ├── i3-build-config
+│   ├── theme-micro
+│   └── theme-flameshot
+├── themes/                 # Palette + syntax definitions
+│   ├── font.json
+│   ├── palette.json
+│   ├── syntax.json
+│   ├── palette_preview.png
+│   └── visualize_colors    # Script to preview palette colors
+└── README.md               # This file
+```
