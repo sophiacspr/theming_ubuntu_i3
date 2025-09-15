@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+
+import json, pathlib
+
+home = pathlib.Path.home()
+
+# Load palette and syntax mappings
+palette = json.load(open(home / ".config/theme/palette.json"))
+syntax  = json.load(open(home / ".config/theme/syntax.json"))
+
+# Ensure Micro colorschemes directory exists
+outdir = home / ".config/micro/colorschemes"
+outdir.mkdir(parents=True, exist_ok=True)
+
+out = outdir / "unified.micro"
+
+def c(key):
+    return palette[syntax.get(key, "foreground")]
+
+theme = f"""
+# -------- Base / Standard --------
+color-link default "{palette['foreground']}" "{palette['background']}"
+color-link comment "{c('comment')}"
+color-link string "{c('string')}"
+color-link keyword "{c('keyword')}"
+color-link identifier "{c('variable')}"
+color-link function "{c('function')}"
+color-link constant "{c('number')}"
+
+# -------- Extended categories --------
+color-link identifier.class "{c('variable')}"
+color-link identifier.var "{c('variable')}"
+color-link constant.number "{c('number')}"
+color-link constant.string "{c('string')}"
+color-link symbol "{c('keyword')}"
+color-link symbol.brackets "{palette['color7']}"
+color-link symbol.tag "{c('keyword')}"
+color-link type "{palette['color6']}"
+color-link type.keyword "{c('keyword')}"
+color-link special "{c('string')}"
+color-link statement "{c('keyword')}"
+color-link preproc "{c('keyword')}"
+color-link underlined "{palette['accent']}"
+
+# -------- Errors, hints, TODO --------
+color-link error "bold {palette['color1']}"
+color-link todo "bold {palette['color11']}"
+
+# -------- Diff --------
+color-link diff-add "{palette['color2']}"
+color-link diff-modified "{palette['color4']}"
+color-link diff-deleted "{palette['color1']}"
+
+# -------- Gutter / Borders --------
+color-link gutter-error "{palette['color1']}"
+color-link gutter-warning "{palette['color11']}"
+color-link indent-char "{palette['color8']}"
+color-link line-number "{palette['color8']}"
+color-link current-line "{palette['color0']}" "{palette['background']}"
+color-link cursor-line "{palette['color8']}" "{palette['background']}"
+color-link color-column "{palette['color0']}"
+
+# -------- UI elements --------
+color-link statusline "{palette['foreground']}" "{palette['color0']}"
+color-link tabbar "{palette['foreground']}" "{palette['color0']}"
+color-link type.extended "default"
+"""
+
+out.write_text(theme)
+print(f"Wrote {out}")

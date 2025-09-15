@@ -1,0 +1,9 @@
+{
+  "comment": "color8",
+  "string": "color2",
+  "keyword": "accent",
+  "function": "color4",
+  "number": "color3",
+  "variable": "foreground"
+}
+

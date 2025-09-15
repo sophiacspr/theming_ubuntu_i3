@@ -1,0 +1,313 @@
+#!/usr/bin/env python3
+
+import json
+import pathlib
+
+home = pathlib.Path.home()
+palette = json.load(open(home / ".config/theme/palette.json"))
+syntax = json.load(open(home / ".config/theme/syntax.json"))
+font = json.load(open(home / ".config/theme/font.json"))
+
+# VS Code user settings
+settings_path = home / ".config/Code/User/settings.json"
+settings_path.parent.mkdir(parents=True, exist_ok=True)
+
+data = {}
+if settings_path.exists():
+    try:
+        data = json.load(open(settings_path))
+    except Exception:
+        pass
+
+wc = data.setdefault("workbench.colorCustomizations", {})
+
+# base helpers
+bg = palette["background"]
+fg = palette["foreground"]
+acc = palette.get("accent", palette["color4"])
+dim = palette.get("color0", bg)
+border = palette.get("color8", fg)
+
+wc.update({
+    # -------- Core Workbench --------
+    "foreground": fg,
+    "focusBorder": acc,
+    "selection.background": palette.get("selection", acc),
+
+    "editor.background": bg,
+    "editor.foreground": fg,
+
+    "sideBar.background": dim,
+    "sideBar.foreground": fg,
+    "sideBar.border": border,
+    "sideBarTitle.foreground": fg,
+
+    "activityBar.background": dim,
+    "activityBar.foreground": fg,
+    "activityBar.inactiveForeground": palette.get("color8", fg),
+    "activityBar.activeBorder": acc,
+    "activityBar.dropBorder": acc,
+    "activityBarBadge.background": acc,
+    "activityBarBadge.foreground": bg,
+
+    "icon.foreground": fg,
+    "icon.inactiveForeground": palette.get("color8", fg),
+
+    "sideBarSectionHeader.background": dim,
+    "sideBarSectionHeader.foreground": fg,
+
+    "toolbar.hoverBackground": dim,
+    "toolbar.activeBackground": dim,
+
+    "statusBar.background": dim,
+    "statusBar.foreground": fg,
+    "statusBar.noFolderBackground": dim,
+    "statusBar.debuggingBackground": acc,
+    "statusBar.debuggingForeground": bg,
+
+    "titleBar.activeBackground": dim,
+    "titleBar.activeForeground": fg,
+    "titleBar.inactiveBackground": dim,
+    "titleBar.inactiveForeground": palette.get("color8", fg),
+
+    "panel.background": dim,
+    "panel.border": border,
+
+    # -------- Tabs --------
+    "tab.activeBackground": bg,
+    "tab.activeForeground": fg,
+    "tab.inactiveBackground": dim,
+    "tab.inactiveForeground": palette.get("color8", fg),
+    "tab.activeBorderTop": acc,
+    "tab.selectedBorderTop": acc,
+    "editorGroup.border": border,
+    "editorGroupHeader.tabsBackground": dim,
+
+    # -------- Lists --------
+    "list.activeSelectionBackground": acc,
+    "list.activeSelectionForeground": bg,
+    "list.activeSelectionIconForeground": bg,
+    "list.inactiveSelectionBackground": dim,
+    "list.inactiveSelectionForeground": fg,
+    "list.inactiveSelectionIconForeground": fg,
+    "list.hoverBackground": dim,
+    "list.hoverForeground": fg,
+    "list.focusBackground": dim,
+    "list.focusForeground": fg,
+    "list.focusOutline": border,
+
+    # -------- Buttons --------
+    "button.background": acc,
+    "button.foreground": bg,
+    "button.hoverBackground": palette.get("color12", acc),
+    "button.secondaryBackground": dim,
+    "button.secondaryForeground": fg,
+    "button.secondaryHoverBackground": palette.get("color8", fg),
+
+    "extensionButton.prominentBackground": acc,
+    "extensionButton.prominentForeground": bg,
+    "extensionButton.prominentHoverBackground": palette.get("color12", acc),
+
+    # -------- Inputs / Dropdowns --------
+    "dropdown.background": dim,
+    "dropdown.foreground": fg,
+    "dropdown.border": border,
+    "input.background": dim,
+    "input.foreground": fg,
+    "input.border": border,
+    "input.placeholderForeground": palette.get("color8", fg),
+    "inputOption.activeBackground": dim,
+    "inputOption.activeBorder": acc,
+
+    # -------- Menus --------
+    "menubar.background": dim,
+    "menubar.foreground": fg,
+    "menubar.selectionBackground": acc,
+    "menubar.selectionForeground": bg,
+
+    "menu.background": dim,
+    "menu.foreground": fg,
+    "menu.border": border,
+    "menu.selectionBackground": acc,
+    "menu.selectionForeground": bg,
+    "menu.separatorBackground": border,
+
+    # -------- Integrated Terminal (ANSI 16) --------
+    "terminal.background": bg,
+    "terminal.foreground": fg,
+    "terminal.ansiBlack":      palette["color0"],
+    "terminal.ansiRed":        palette["color1"],
+    "terminal.ansiGreen":      palette["color2"],
+    "terminal.ansiYellow":     palette["color3"],
+    "terminal.ansiBlue":       palette["color4"],
+    "terminal.ansiMagenta":    palette["color5"],
+    "terminal.ansiCyan":       palette["color6"],
+    "terminal.ansiWhite":      palette["color7"],
+    "terminal.ansiBrightBlack":   palette["color8"],
+    "terminal.ansiBrightRed":     palette["color9"],
+    "terminal.ansiBrightGreen":   palette["color10"],
+    "terminal.ansiBrightYellow":  palette["color11"],
+    "terminal.ansiBrightBlue":    palette["color12"],
+    "terminal.ansiBrightMagenta": palette["color13"],
+    "terminal.ansiBrightCyan":    palette["color14"],
+    "terminal.ansiBrightWhite":   palette["color15"],
+
+    # -------- Quick Input / Command Palette --------
+    "put.background": dim,
+    "quickInput.foreground": fg,
+    "quickInputTitle.background": dim,
+    "pickerGroup.border": border,
+    "pickerGroup.foreground": fg,
+    "quickInputList.focusBackground": dim,
+    "quickInputList.focusForeground": fg,
+    "quickInputList.focusIconForeground": fg,
+
+    # -------- Widgets allgemein --------
+    "widget.shadow": "#00000000",
+    "widget.border": border,
+
+    # -------- Search Editor --------
+    "searchEditor.findMatchBackground": border,
+    "searchEditor.textInputBorder": border,
+})
+
+extras = {
+    # Activity bar (top)
+    "activityBarTop.activeBorder": acc,
+    "activityBarTop.dropBorder": border,
+    "activityBarTop.foreground": fg,
+    "activityBarTop.inactiveForeground": palette.get("color8", fg),
+
+    # Badges
+    "activityErrorBadge.background": palette.get("color1", acc),
+    "activityErrorBadge.foreground": bg,
+    "activityWarningBadge.background": palette.get("color3", acc),
+    "activityWarningBadge.foreground": bg,
+
+    # Banner
+    "banner.background": acc,
+    "banner.foreground": bg,
+    "banner.iconForeground": acc,
+
+    # Breadcrumbs
+    "breadcrumb.activeSelectionForeground": fg,
+    "breadcrumb.background": dim,
+    "breadcrumb.focusForeground": fg,
+    "breadcrumb.foreground": palette.get("color8", fg),
+    "breadcrumbPicker.background": dim,
+
+    # Buttons
+    "button.separator": border,
+
+    # Charts
+    "chart.axis": border,
+    "chart.guide": palette.get("color8", border),
+    "chart.line": acc,
+    "charts.foreground": fg,
+    "charts.blue": palette.get("color4", acc),
+    "charts.green": palette.get("color2", acc),
+    "charts.orange": palette.get("color3", acc),
+    "charts.purple": palette.get("color5", acc),
+    "charts.red": palette.get("color1", acc),
+    "charts.yellow": palette.get("color11", acc),
+
+    # Chat
+    "chat.avatarBackground": dim,
+    "chat.avatarForeground": fg,
+    "chat.checkpointSeparator": border,
+    "chat.linesAddedForeground": palette.get("color2", acc),
+    "chat.linesRemovedForeground": palette.get("color1", acc),
+    "chat.requestBackground": dim,
+    "chat.requestBorder": border,
+    "chat.requestBubbleBackground": dim,
+    "chat.requestBubbleHoverBackground": palette.get("color0", dim),
+    "chat.requestCodeBorder": border,
+}
+wc.update(extras)
+
+wc.update({
+    # -------- Command Center (top) --------
+    "commandCenter.background": dim,
+    "commandCenter.foreground": fg,
+    "commandCenter.border": border,
+
+    "commandCenter.activeBackground": acc,
+    "commandCenter.activeForeground": bg,
+    "commandCenter.activeBorder": acc,
+
+    "commandCenter.inactiveForeground": palette.get("color8", fg),
+    "commandCenter.inactiveBorder": palette.get("color8", border),
+})
+
+wc.update({
+    "foreground": fg,
+    "editor.background": bg,
+    "editor.foreground": fg,
+
+    # -------- Inputs --------
+    "input.background": dim,
+    "input.foreground": fg,
+    "input.border": border,
+    "input.placeholderForeground": palette.get("color8", fg),
+
+    # -------- Widgets (Quick Input, Peek, Dropdowns) --------
+    "editorWidget.background": dim,
+    "editorWidget.foreground": fg,
+    "editorWidget.border": border,
+
+    # -------- Editor-Search / Match-Highlight --------
+    "editor.findMatchBackground": acc,
+    "editor.findMatchHighlightBackground": dim,
+    "editor.findMatchBorder": acc,
+    "editor.findMatchHighlightBorder": acc,
+
+    # -------- Hover-Popups in Editor --------
+    "editorHoverWidget.background": dim,
+    "editorHoverWidget.foreground": fg,
+    "editorHoverWidget.border": border,
+})
+
+wc.update({
+    # Tabs
+    "tab.activeBackground": bg,
+    "tab.activeForeground": fg,
+    "tab.inactiveBackground": dim,
+    "tab.inactiveForeground": palette["color8"],
+
+    "tab.unfocusedActiveBackground": dim,
+    "tab.unfocusedActiveForeground": fg,
+    "tab.unfocusedInactiveBackground": dim,
+    "tab.unfocusedInactiveForeground": palette["color8"],
+
+    "tab.activeBorderTop": acc
+})
+
+
+# Token colors
+tc = data.setdefault("editor.tokenColorCustomizations", {})
+tc["textMateRules"] = [
+    {"scope": "comment",   "settings": {
+        "foreground": palette[syntax["comment"]]}},
+    {"scope": "string",    "settings": {
+        "foreground": palette[syntax["string"]]}},
+    {"scope": "keyword",   "settings": {
+        "foreground": palette[syntax["keyword"]]}},
+    {"scope": "variable",  "settings": {
+        "foreground": palette[syntax["variable"]]}},
+    {"scope": "function",  "settings": {
+        "foreground": palette[syntax["function"]]}},
+    {"scope": "number",    "settings": {
+        "foreground": palette[syntax["number"]]}},
+]
+
+# Fonts
+data["editor.fontFamily"] = font.get("family", "monospace")
+data["editor.fontSize"] = font.get("size", 12)
+
+# Write file
+tmp = settings_path.with_suffix(".tmp")
+with open(tmp, "w") as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
+
+tmp.replace(settings_path)
+print(f"Wrote {settings_path}, extending current settings")

@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+
+import json, pathlib
+
+# Paths
+home = pathlib.Path.home()
+palette_file = home / ".config/theme/palette.json"
+font_file    = home / ".config/theme/font.json"
+dst          = home / ".config/i3/colors.i3"
+
+# Load the color palette
+with open(palette_file) as f:
+    P = json.load(f)
+
+bg   = P["background"]
+fg   = P["foreground"]
+acc  = P.get("accent", P.get("color4", fg))
+dim  = P.get("color0", bg)
+mut  = P.get("color8", fg)
+urg  = P.get("color1", acc)
+
+color_text = (
+    "# DEFINED COLORS FROM palette.json AND FONT FROM font.json\n"
+    f"set $bg {bg}\n"
+    f"set $fg {fg}\n"
+    f"set $accent {acc}\n"
+    f"set $dim {dim}\n"
+    f"set $muted {mut}\n"
+    f"set $urgent {urg}\n"
+)
+
+# Load the font definition
+try:
+    with open(font_file) as f:
+        F = json.load(f)
+except FileNotFoundError:
+    F = {"family": "monospace", "size": 10}
+
+# Write the font definition
+font_text = f"set $font: {F['family']}\n"
+font_text = font_text + f"set $size: {F['size']}\n"
+
+# Write colors + font to colors.i3
+dst.parent.mkdir(parents=True, exist_ok=True)
+dst.write_text(color_text + font_text)
+
+print(f"Wrote {dst}")

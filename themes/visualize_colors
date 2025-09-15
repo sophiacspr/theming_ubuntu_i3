@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+
+import json
+import pathlib
+import matplotlib.pyplot as plt
+
+home = pathlib.Path.home()
+palette_file = home / ".config/theme/palette.json"
+
+palette = json.load(open(palette_file))
+
+# sort keys and values
+keys = sorted(palette.keys())
+values = [palette[k] for k in keys]
+
+# plot
+fig, ax = plt.subplots(figsize=(8, len(keys) * 0.4))
+for i, (k, v) in enumerate(zip(keys, values)):
+    if k != "comments":
+        ax.add_patch(plt.Rectangle((0, i), 1, 1, color=v))
+        ax.text(1.1, i + 0.5, f"{k}: {v}", va="center", ha="left", fontsize=10)
+
+ax.set_xlim(0, 5)
+ax.set_ylim(0, len(keys))
+ax.axis("off")
+
+# save
+out_file = home / ".config/theme/palette_preview.png"
+plt.savefig(out_file, bbox_inches="tight")
+
+# Also save PNG into the current working directory (repo root)
+repo_file = pathlib.Path.cwd() / "themes/palette_preview.png"
+plt.savefig(repo_file)
+plt.close()
+
+print(f"Palette preview saved to: {out_file} and {repo_file}")

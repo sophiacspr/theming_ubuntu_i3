@@ -1,0 +1,199 @@
+#!/usr/bin/env python3
+
+import json, pathlib
+
+# paths
+home = pathlib.Path.home()
+palette_file = home / ".config/theme/palette.json"
+font_file    = home / ".config/theme/font.json"
+dst          = home / ".config/rofi/theme.rasi"
+
+# load palette and font data
+palette = json.load(open(palette_file))
+font = json.load(open(font_file))
+
+# extract colors
+bg      = palette["background"]
+fg      = palette["foreground"]
+acc  = palette.get("accent", palette.get("color4", fg))
+dim     = palette.get("color0", bg)           # slightly darker than bg if present
+border  = palette.get("color8", fg)           # subtle border
+pink    = palette.get("color5", "#f5c2e7")    # fallback if missing
+
+# font family and size
+font_name = font.get("family", "monospace")
+font_size = font.get("size", "10")
+
+rasi = f"""/* Generated from {palette_file} and {font_file} */
+* {{
+  bg:        {bg};
+  bg-dim:    {dim};
+  fg:        {fg};
+  accent:    {acc};
+  pink:      {pink};
+  border:    {border};
+  radius:    10px;
+  spacing:   6px;
+}}
+
+configuration {{
+  show-icons: false;
+  modi: "drun,run,window";
+  icon-theme: "hicolor";
+}}
+
+case-indicator {{
+  background-color: @bg;
+  text-color: @border;
+  border: 0;
+  padding: 0 6px;
+}}
+
+
+window {{
+  background-color: @bg-dim;
+  border: 2px;
+  border-color: @accent;
+  border-radius: @radius;
+  padding: 10px;
+}}
+
+mainbox {{
+  spacing: @spacing;
+  background-color: @bg;
+}}
+
+message, textbox {{
+  background-color: @bg;
+  text-color: @fg;
+  border: 1px;
+  border-color: @border;
+  border-radius: @radius;
+  padding: 8px;
+}}
+
+inputbar {{
+  background-color: @bg;
+  text-color: @fg;
+  border: 1px;
+  border-color: @border;
+  border-radius: @radius;
+  padding: 8px;
+  children: [ prompt, entry, case-indicator ];
+}}
+
+
+prompt {{
+  background-color: @bg;
+  text-color: @pink;
+  padding: 0 8px 0 0;
+}}
+
+
+entry {{
+  background-color: transparent;
+  text-color: @fg;
+  placeholder-color: @border;
+}}
+
+case-indicator {{
+  text-color: @border;
+}}
+
+listview {{
+  background-color: @bg;
+  border: 1px;
+  border-color: @border;
+  border-radius: @radius;
+  padding: 4px;
+  spacing: 2px;
+  fixed-height: 0;
+  lines: 15;
+  columns: 1;
+  cycle: false;
+  scrollbar: true;
+}}
+
+scrollbar {{
+  background-color: @bg-dim;
+  handle-color: @accent;
+  border: 0;
+  width: 6px;
+}}
+
+element {{
+  background-color: transparent;
+  text-color: @fg;
+  border: 0;
+  padding: 6px 8px;
+  margin: 0;
+}}
+
+element-icon {{
+  size: 1.0em;
+}}
+
+element-text {{
+  background-color: transparent;
+  text-color: inherit;
+}}
+
+element.normal.normal {{ }}
+element.normal.active {{ }}
+element.normal.urgent {{ }}
+
+element.selected.normal {{
+  background-color: @accent;
+  text-color: @bg;
+  border-radius: @radius;
+}}
+
+element.selected.active {{
+  background-color: @accent;
+  text-color: @bg;
+  border-radius: @radius;
+}}
+
+element.selected.urgent {{
+  background-color: @pink;
+  text-color: @bg;
+  border-radius: @radius;
+}}
+
+
+element.alternate.normal {{
+  background-color: @bg-dim;
+}}
+
+mode-switcher {{
+  background-color: @bg;
+  border: 1px;
+  border-color: @border;
+  border-radius: @radius;
+  padding: 4px;
+}}
+
+button {{
+  background-color: @bg;
+  text-color: @fg;
+  border: 1px;
+  border-color: @border;
+  border-radius: @radius;
+  padding: 4px 8px;
+}}
+
+button.selected {{
+  background-color: @pink;
+  text-color: @bg;
+}}
+
+* {{
+  font: "{font_name} {font_size}";
+}}
+
+"""
+
+# ensure destination dir exists and write theme file
+dst.parent.mkdir(parents=True, exist_ok=True)
+dst.write_text(rasi)
+print(f"Wrote {dst}")

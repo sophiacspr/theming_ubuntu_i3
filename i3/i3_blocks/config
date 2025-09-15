@@ -1,0 +1,58 @@
+############# configuration for the i3blocks status bar #############
+
+
+# display the currently played song/video
+[playerctl]
+interval=persist # constantly buffer the current script output
+command=stdbuf -i0 -e0 -o0 playerctl metadata --follow --format '{{ artist }} - {{ title }}'
+
+# display wheather information, clicking it opens browser with wheather information for current location
+[weather]
+command=~/.config/i3blocks/weather.sh
+interval=600 # update every 600 seconds
+
+# display time and date, clicking it opens browser with google calender
+[time]
+command=~/.config/i3blocks/time.sh
+interval=1
+
+# display battery percentage, status if its charging or not and the power saving mode, clicking it toggles between different power saving modi
+[battery]
+command=~/.config/i3blocks/battery.sh
+interval=30
+
+# display cpu usage, clicking it open system monitor
+[cpuinfo/percentage]
+command=~/.config/i3blocks/cpu_percentage.sh
+interval=5
+
+# display cpu temp
+[cpuinfo/temp]
+command=~/.config/i3blocks/cpu_temp.sh
+interval=5
+
+# display volume percentage, clicking it mutes/unmutes and mouse wheel scrolling up/down changes it
+[volume]
+command=~/.config/i3blocks/volume.sh
+interval=once
+signal=10
+
+# display wifi network, clicking it opens wifi manager
+[wifi]
+command=~/.config/i3blocks/wifi.sh
+interval=10
+
+# display bluetooth connections, clicking it opens bluetooth manager
+[bluetooth]
+command=~/.config/i3blocks/bluetooth.sh
+interval=10
+
+# display currently used keyboard layout
+[layout]
+command=~/.config/i3blocks/keyboard_layout.sh
+interval=1
+
+# add one little space at the end of the config for the last written text not to be jammed at the end
+[spacer]
+command=echo " "
+interval=once

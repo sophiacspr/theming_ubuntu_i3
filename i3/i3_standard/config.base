@@ -1,0 +1,252 @@
+
+################## VISUALS ##################
+
+# ---------------- colors, fonts and looks -----------
+
+# never hide borders, define the looks of the borders
+hide_edge_borders none         
+  
+# define styles for borders
+default_border pixel 3
+default_floating_border normal
+new_window pixel 3
+new_float normal
+for_window [class="^.*$"] border pixel 3
+
+# define font
+font pango:$font $size
+
+# define colors for borders
+# class                 border         backgr.        text     indicator       child_border
+client.focused          $accent        $bg            $fg      $accent         $accent
+client.focused_inactive $dim           $bg            $muted   $dim            $dim
+client.unfocused        $dim           $bg            $muted   $dim            $dim
+client.urgent           $urgent        $urgent        $bg      $urgent         $urgent
+
+################## i3 BAR  ##################
+
+# define the bar using i3blocks (not i3status)
+bar {
+        status_command i3blocks
+        separator_symbol " | "   
+        tray_output none 
+        
+        font pango:$font 10
+
+    colors {
+            background $bg
+            statusline $fg
+            separator  $muted
+    
+            # workspace buttons
+            focused_workspace  $accent $accent $bg
+            active_workspace   $dim    $dim    $fg
+            inactive_workspace $dim    $dim    $muted
+            urgent_workspace   $urgent $urgent $fg
+        }
+}
+
+
+################## START-UP ##################
+
+# For arch only
+# Start XDG autostart .desktop files using dex. See also
+# https://wiki.archlinux.org/index.php/XDG_Autostart
+# exec --no-startup-id dex --autostart --environment i3
+
+# screenshots util
+exec --no-startup-id flameshot --no-tray
+# screenshot path: + create folder, if not there
+bindsym Print exec sh -c 'mkdir -p ~/Pictures/Screenshots && flameshot gui --clipboard --path ~/Pictures/Screenshots'
+
+# network manager
+exec --no-startup-id nm-applet
+
+################## LOCKSCREEN ##################
+
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+# no screen saver, power management, black screen going 
+exec --no-startup-id xset s off -dpms s noblank
+
+################## TOUCHPAD ####################
+
+exec --no-startup-id ~/.config/i3/touchpad.sh
+
+################## KEYBOARD ####################
+
+exec --no-startup-id ~/.config/i3/keyboard.sh
+
+################## KEYBINDINGS ##################
+
+# ---------------- functions and applications -----------
+# modifier key
+set $mod Mod4
+
+# start a terminal
+bindsym $mod+Return exec wezterm
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# notes: create a new empty document in folder specified in the newnote.sh
+bindsym $mod+Shift+n exec --no-startup-id ~/.config/i3/newnote.sh
+
+# open the rofi menu
+bindsym $mod+d exec --no-startup-id rofi -show drun -theme ~/.config/rofi/theme.rasi
+
+# restart i3 inplace (updates the config) and retheme the entire theming
+bindsym $mod+Shift+r exec --no-startup-id sh -c "retheme && i3-msg restart"
+
+# exit i3 nagbar for logging out of i3 (such that it is displayed on all open windows)
+bindsym $mod+Shift+e exec "i3-nagbar -p -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'" 
+
+# power off menu
+bindsym $mod+Shift+L exec --no-startup-id ~/.config/i3/poweroff.sh
+
+# power mode: balanced vs. performance
+# bindsym $mod+Shift+b exec "set powerprofilesctl balanced"
+# bindsym $mod+Shift+h exec "set powerprofilesctl performance"
+
+# websites shortcuts 
+# bindsym $mod+C exec --no-startup-id xdg-open https://chatgpt.com/
+# bindsym $mod+K exec --no-startup-id xdg-open https://ilias.studium.kit.edu/login.php?client_id=produktiv&cmd=force_login&lang=de
+
+# volume control
+exec --no-startup-id /home/sophia/.config/i3/volume-daemon.sh
+bindsym XF86AudioRaiseVolume exec --no-startup-id "/home/sophia/.config/i3/volume.sh up"
+bindsym XF86AudioLowerVolume exec --no-startup-id "/home/sophia/.config/i3/volume.sh down"
+bindsym XF86AudioMute        exec --no-startup-id "/home/sophia/.config/i3/volume.sh mute"
+
+# brightness control
+bindsym XF86MonBrightnessUp exec --no-startup-id "sudo brightnessctl set +10%"
+bindsym XF86MonBrightnessDown exec --no-startup-id "sudo brightnessctl set 10%-"
+
+
+
+# ---------------- window management -----------
+
+# move tiling windows via drag & drop by left-clicking into the title bar,
+# or left-clicking anywhere into the window while holding the floating modifier.
+tiling_drag modifier titlebar
+
+# use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# cursor keys for moving window focus
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# cursor keys + Shift for moving windows
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# full screen
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# # toggle tiling / floating
+# bindsym $mod+Shift+space floating toggle
+# 
+# # change focus between tiling / floating windows
+# bindsym $mod+space focus mode_toggle
+# 
+# # focus the parent container
+# bindsym $mod+a focus parent
+# 
+# # focus the child container
+# #bindsym $mod+d focus child
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# switch to workspace
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym odiaeresis resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        # bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+import json, pathlib
+
+# paths
+home = pathlib.Path.home()
+palette_file = home / ".config/theme/palette.json"
+dst = home / ".config/yazi/theme.toml"
+
+# load palette.json
+palette = json.load(open(palette_file))
+
+# build TOML theme string
+toml = f"""# generated from palette.json
+[manager]
+bg = "{palette['background']}"
+fg = "{palette['foreground']}"
+
+[status]
+bg = "{palette['background']}"
+fg = "{palette['foreground']}"
+
+[preview]
+bg = "{palette['background']}"
+"""
+
+# ensure target directory exists
+dst.parent.mkdir(parents=True, exist_ok=True)
+
+# write theme file
+dst.write_text(toml)
+
+print(f"Wrote {dst}")

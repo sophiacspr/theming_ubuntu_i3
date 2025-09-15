@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+
+palette="$HOME/.config/theme/palette.json"
+config="$HOME/.config/flameshot/flameshot.ini"
+
+# pick a key from palette.json, e.g. "accent"
+color=$(jq -r '.accent' "$palette")
+
+# ensure flameshot wants hex format like "#rrggbb"
+if [[ ! "$color" =~ ^# ]]; then
+  color="#$color"
+fi
+
+# replace uiColor line in config
+sed -i "s/^uiColor=.*/uiColor=$color/" "$config"
+
+echo "Wrote $config"
