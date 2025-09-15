@@ -16,9 +16,14 @@ The setup uses a `Makefile` to install everything in the correct places and keep
 
 Either all tools can be configured to be updated or just `i3`.
 
-**Note: This is generally still a very personalized setup, e.g. with special keybindings in `i3` or the choice of the tools which I just intended for my personal use on Ubuntu. That's also why I cannot guarantee it working for you from the start, not messing with other settings you have, etc. However, still feel free to take inspiration from my setup :) I am also planning on separating the color costumization and the i3 configuration part into individual projects since that could perhaps be more useful for others than myself. But, for now, this repository just mainly holds my personal code.**
+# Disclaimer
 
-**Note: Your local config for i3 is replaced by the scripts.**
+This is generally still a very personalized setup, e.g. with special keybindings in `i3` or the choice of the tools which I just intended for my personal use on Ubuntu. That's also why I cannot guarantee it working for you from the start, not messing with other settings you have, etc. However, still feel free to take inspiration from my setup :) I am also planning on separating the color costumization and the i3 configuration part into individual projects since that could perhaps be more useful for others than myself. But, for now, this repository just mainly holds my personal code.
+
+Your local config for i3 is replaced by the scripts.
+
+Please note: This setup is highly specific to my personal workflow on Ubuntu, including custom keybindings and tool selections. As such, I cannot guarantee compatibility with other systems or that it will not affect your existing configuration. Feel free to take inspiration from my approach and adapt elements to your own needs. In the future, I may separate the color customization and i3 configuration into distinct projects to make them more broadly useful. For now, this repository primarily contains my personal code and preferences tailored to my system.
+
 
 ---
 
@@ -79,6 +84,7 @@ Either all tools can be configured to be updated or just `i3`.
    - Install `font.json`, `palette.json`, and `syntax.json` into `~/.config/theme`
    - Link `i3` and `i3blocks` configs into `~/.config/i3` and `~/.config/i3blocks`
    It is done for either all needed files or just the ones needed for `i3`.
+   Your local config for i3 will be replaced by the scripts.
 
 3. Run the theming once:
    ```bash
