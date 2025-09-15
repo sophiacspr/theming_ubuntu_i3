@@ -30,15 +30,19 @@ Please note: This setup is highly specific to my personal workflow on Ubuntu, in
 ## Examples
 
 Example of the Micro terminal editor with Python syntax highlighting and unified colors:
+
 <img src="themes/examples/python_example.png" alt="Micro Editor - Python" width="300" />
 
 Example of the i3 blocks status bar:
-<img src="themes/examples/i3bar_example.png" alt="i3 Status Bar" width="700" />
+
+<img src="themes/examples/i3bar_example.png" alt="i3 Status Bar" width="900" />
 
 Example of the Rofi menu:
+
 <img src="themes/examples/rofi_example.png" alt="Rofi Menu" width="300" />
 
 Example of the Color Palette Preview:
+
 <img src="themes/examples/palette_preview.png" alt="Palette Preview" width="300" />
 
 ---
