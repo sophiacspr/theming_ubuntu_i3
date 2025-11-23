@@ -71,11 +71,11 @@ exec --no-startup-id xset s off -dpms s noblank
 
 ################## TOUCHPAD ####################
 
-exec --no-startup-id ~/.config/i3/touchpad.sh
+exec_always --no-startup-id ~/.config/i3/touchpad.sh
 
 ################## KEYBOARD ####################
 
-exec --no-startup-id ~/.config/i3/keyboard.sh
+exec_always --no-startup-id ~/.config/i3/keyboard.sh
 
 ################## KEYBINDINGS ##################
 
@@ -93,7 +93,10 @@ bindsym $mod+Shift+q kill
 bindsym $mod+Shift+n exec --no-startup-id ~/.config/i3/newnote.sh
 
 # open the rofi menu
-bindsym $mod+d exec --no-startup-id rofi -show drun -theme ~/.config/rofi/theme.rasi
+# -show combi runs in rofi in combi mode with normal app launcher drun and own search results
+# --combi-display-format configures launcher to just display the application, not the source (drun/combi)
+# -display-combi "Open:" displays the text "Open:" at the top of the menu where the search bar is
+bindsym $mod+d exec --no-startup-id "rofi -modi 'drun,custom:~/.config/rofi/custom.sh' -show combi -combi-modi 'drun,custom' -combi-display-format '{text}' -theme ~/.config/rofi/theme.rasi -display-combi 'Open:'"
 
 # restart i3 inplace (updates the config) and retheme the entire theming
 bindsym $mod+Shift+r exec --no-startup-id sh -c "retheme && i3-msg restart"
@@ -110,10 +113,10 @@ bindsym $mod+Shift+L exec --no-startup-id ~/.config/i3/poweroff.sh
 
 # websites shortcuts 
 # bindsym $mod+C exec --no-startup-id xdg-open https://chatgpt.com/
-# bindsym $mod+K exec --no-startup-id xdg-open https://ilias.studium.kit.edu/login.php?client_id=produktiv&cmd=force_login&lang=de
+bindsym $mod+K exec --no-startup-id xdg-open https://www.icloud.com/notes/note/UHJpdmF0ZTo6Tm90ZXM6OmN1cnJlbnRVc2VyOjpGMjRBNEIzNS0wNzRCLTQ0RDAtQTU5OC0zNkE0RjU4RDY0QkY=
 
 # volume control
-exec --no-startup-id /home/sophia/.config/i3/volume-daemon.sh
+exec_always --no-startup-id /home/sophia/.config/i3/volume-daemon.sh
 bindsym XF86AudioRaiseVolume exec --no-startup-id "/home/sophia/.config/i3/volume.sh up"
 bindsym XF86AudioLowerVolume exec --no-startup-id "/home/sophia/.config/i3/volume.sh down"
 bindsym XF86AudioMute        exec --no-startup-id "/home/sophia/.config/i3/volume.sh mute"
