@@ -36,9 +36,11 @@ try:
 except FileNotFoundError:
     F = {"family": "monospace", "size": 10}
 
+# read font size and make smaller than the default
+size = F['size'] - 4
 # Write the font definition
 font_text = f"set $font: {F['family']}\n"
-font_text = font_text + f"set $size: {F['size']}\n"
+font_text = font_text + f"set $size: {size}\n"
 
 # Write colors + font to colors.i3
 dst.parent.mkdir(parents=True, exist_ok=True)
