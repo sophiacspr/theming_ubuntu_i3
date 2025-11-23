@@ -1,0 +1,13 @@
+# Trigger the script to run the automatic layout for the docking station at home 
+
+
+# Trigger when the specific docking station is connected
+ACTION=="add", SUBSYSTEM=="usb", ENV{ID_VENDOR_ID}=="17ef", ENV{ID_MODEL_ID}=="3066", \
+  RUN+="/usr/local/bin/xrandr_docking_station.sh"
+
+# Trigger when displays change 
+# AND the dock with these IDs is present
+ACTION=="change", SUBSYSTEM=="drm", \
+  ENV{ID_VENDOR_ID}=="17ef", ENV{ID_MODEL_ID}=="3066", \
+  RUN+="/usr/local/bin/xrandr_docking_station.sh"
+

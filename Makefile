@@ -3,13 +3,24 @@ THEME_DIR = $(HOME)/.config/theme
 
 i3CONFIG_STANDARD_DIR = $(HOME)/.config/i3
 i3CONFIG_BLOCKS_DIR = $(HOME)/.config/i3blocks
+DOCK_SCRIPT_TARGET = /usr/local/bin/docking_layout.sh
+DOCK_UDEV_RULE_TARGET = /etc/udev/rules.d/99-dock-layout.rules
 
 SCRIPTS = theme-yazi theme-vscode theme-rofi theme-i3-colors i3-build-config theme-micro theme-flameshot
 i3SCRIPTS = theme-i3-colors i3-build-config
 
 THEME_CONFIGS = font.json palette.json syntax.json
 
-.PHONY: install install-i3 clean yazi vscode rofi i3 micro flameshot retheme-all retheme-i3 vis-palette
+.PHONY: install install-i3 clean yazi vscode rofi i3 micro flameshot retheme-all retheme-i3 vis-palette install-dock-script
+
+# Install script for the docking station recognition
+install-dock-script:
+	sudo ln -sf $(CURDIR)/udev_rules/dock/layout.sh $(DOCK_SCRIPT_TARGET)
+	sudo chmod +x $(DOCK_SCRIPT_TARGET)
+	sudo ln -sf $(CURDIR)/udev_rules/dock/99-dock-layout.rules $(DOCK_UDEV_RULE_TARGET)
+	sudo udevadm control --reload
+	sudo udevadm trigger
+
 
 # Install the color palettes and fonts configurations
 install-themes:
@@ -73,7 +84,9 @@ clean:
 	@for f in $(CURDIR)/i3/i3_blocks/*.sh; do \
 	  rm -f $(i3CONFIG_BLOCKS_DIR)/$$(basename $$f); \
 	done
-	@echo "Removed installed scripts into $(LOCAL_PREFIX), theme files from $(THEME_DIR) and i3 config files from $(i3CONFIG_STANDARD_DIR) and $(i3CONFIG_BLOCKS_DIR)"
+	rm -f $(DOCK_SCRIPT_TARGET)
+	rm -f $(DOCK_UDEV_RULE_TARGET)
+	@echo "Removed installed scripts into $(LOCAL_PREFIX), theme files from $(THEME_DIR) and i3 config files from $(i3CONFIG_STANDARD_DIR) and $(i3CONFIG_BLOCKS_DIR) and docking station config files."
 
 # Individual targets (call installed scripts)
 yazi:
@@ -107,3 +120,4 @@ retheme-i3: i3
 vis-palette:
 	@chmod +x $(CURDIR)/themes/visualize_colors
 	@$(CURDIR)/themes/visualize_colors || true
+
