@@ -1,0 +1,13 @@
+# Notes for xinput settings, e.g. touchpad, currently not integrated into the workflow 
+
+Touchpad: 
+Invert scrolling direction: xinput set-prop 10 "libinput Natural Scrolling Enabled" 1
+
+
+Tapping (click by tapping the trackpad, not only using physical buttons):
+xinput set-prop 10 "libinput Tapping Enabled" 1
+
+
+Map the middle button to the same functionality as the left button on the trackpad only:
+(for device with id 10, set the mapping for the three buttons to the functionalities of button 1,2 => 1 (left func.) and 3 => 3 (right func.))
+xinput set-button-map 10 1 1 3
