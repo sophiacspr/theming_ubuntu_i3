@@ -9,9 +9,17 @@ DOCK_UDEV_RULE_TARGET = /etc/udev/rules.d/99-dock-layout.rules
 SCRIPTS = theme-yazi theme-vscode theme-rofi theme-i3-colors i3-build-config theme-micro theme-flameshot
 i3SCRIPTS = theme-i3-colors i3-build-config
 
+SYSTEMD_USER_DIR := $(HOME)/.config/systemd/user
+SYSTEMD_RULES_DIR := systemd_rules
+
+SYSTEMD_UNITS := $(wildcard $(SYSTEMD_RULES_DIR)/*.service) # files in systemd_rules folder ending with .service
+
+
 THEME_CONFIGS = font.json palette.json syntax.json
 
-.PHONY: install install-i3 clean yazi vscode rofi i3 micro flameshot retheme-all retheme-i3 vis-palette install-dock-script
+.PHONY: all
+
+all: install install-i3 yazi vscode rofi i3 micro flameshot retheme-all retheme-i3 vis-palette install-dock-script echo-dot-bluetooth-auto-connect
 
 # Install script for the docking station recognition
 install-dock-script:
@@ -86,6 +94,13 @@ clean:
 	done
 	rm -f $(DOCK_SCRIPT_TARGET)
 	rm -f $(DOCK_UDEV_RULE_TARGET)
+	# remove system_d rules
+	@for unit in $(SYSTEMD_UNITS); do \
+		  systemctl --user disable $$(basename $$unit) 2>/dev/null || true; \
+		  rm -f $(SYSTEMD_USER_DIR)/$$(basename $$unit); \
+	done
+	@systemctl --user restart pipewire pipewire-pulse
+	@systemctl --user daemon-reload
 	@echo "Removed installed scripts into $(LOCAL_PREFIX), theme files from $(THEME_DIR) and i3 config files from $(i3CONFIG_STANDARD_DIR) and $(i3CONFIG_BLOCKS_DIR) and docking station config files."
 
 # Individual targets (call installed scripts)
@@ -120,4 +135,19 @@ retheme-i3: i3
 vis-palette:
 	@chmod +x $(CURDIR)/themes/visualize_colors
 	@$(CURDIR)/themes/visualize_colors || true
+	
+echo-dot-bluetooth-auto-connect:
+	@mkdir -p $(SYSTEMD_USER_DIR)
+	@mkdir -p $(LOCAL_PREFIX)
 
+	@ln -sf $(CURDIR)/$(SYSTEMD_RULES_DIR)/echo-dot-connection.sh \
+		$(LOCAL_PREFIX)/echo-dot-connection.sh
+	@chmod +x $(LOCAL_PREFIX)/echo-dot-connection.sh
+
+	@ln -sf $(CURDIR)/$(SYSTEMD_RULES_DIR)/echo-dot-autoconnect.service \
+		$(SYSTEMD_USER_DIR)/echo-dot-autoconnect.service
+
+	@systemctl --user daemon-reload
+	@systemctl --user enable echo-dot-autoconnect.service
+
+	@echo "Echo Dot Bluetooth auto-connect user service installed and enabled."
