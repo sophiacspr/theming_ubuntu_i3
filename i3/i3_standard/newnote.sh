@@ -10,5 +10,9 @@ mkdir -p "$DIR"
 FILENAME="note-$(date +%Y-%m-%d-%H%M).txt"
 FILE="$DIR/$FILENAME"
 
-# Open the file in micro inside the default terminal
-xdg-terminal -e micro "$FILE"
+# Open the file in micro using the default terminal
+if [ -n "$TERMINAL" ]; then
+    "$TERMINAL" -e micro "$FILE"
+else
+    x-terminal-emulator -e micro "$FILE"
+fi
