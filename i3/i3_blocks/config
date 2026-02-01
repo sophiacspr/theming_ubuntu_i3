@@ -32,7 +32,7 @@ interval=5
 
 # display volume percentage, clicking it mutes/unmutes and mouse wheel scrolling up/down changes it
 [volume]
-command=~/.config/i3blocks/volume.sh
+command=~/.config/i3blocks/volume_bar_control.sh
 interval=10 # otherwise only triggered upon user input
 signal=10
 
