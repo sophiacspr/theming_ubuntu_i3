@@ -1,0 +1,15 @@
+# Automatically try to connect to the Echo Dot on login.
+# If it fails, restore laptop speakers as default audio output.
+# Sends SIGRTMIN+10 to i3blocks to update volume display.
+
+[Unit]
+Description=Auto-connect Echo Dot Bluetooth
+After=bluetooth.target pipewire.service wireplumber.service
+Wants=bluetooth.target wireplumber.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/echo-dot-connection.sh
+
+[Install]
+WantedBy=default.target
