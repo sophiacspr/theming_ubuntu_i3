@@ -1,6 +1,5 @@
 ############# configuration for the i3blocks status bar #############
 
-
 # display the currently played song/video
 [playerctl]
 interval=persist # constantly buffer the current script output
@@ -34,7 +33,7 @@ interval=5
 # display volume percentage, clicking it mutes/unmutes and mouse wheel scrolling up/down changes it
 [volume]
 command=~/.config/i3blocks/volume.sh
-interval=once
+interval=10 # otherwise only triggered upon user input
 signal=10
 
 # display wifi network, clicking it opens wifi manager
